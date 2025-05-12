@@ -3,14 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Platform } from 'react-native';
 
 import Carga from './pantallas/Pantalla_Carga.js';
 import Home from './pantallas/Home.js';
 import PantallaPerfil from './pantallas/Perfil.js';
 import PantallaCustodiar from './pantallas/Custodiar.js';
 import PantallaExplorar from './pantallas/Explorar.js';
-
+import DetallesPez from './pantallas/DetallesPez.js';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   header: {
     display: 'flex',
     flexDirection: 'row',
-    height: 80,
+    height: Platform.OS === 'android' ? 80 : 100,
     backgroundColor: '#fff',
     justifyContent: 'start',
     width: '100%',
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 20,
     fontWeight: 'bold',
-    top: 42,
+    top: Platform.OS === 'android' ? 42 : 60,
     marginLeft: 8,
     fontFamily: 'Montserrat',
   },
   divImagen: {
     width: 40,
     height: 40,
-    top: 36,
+    top: Platform.OS === 'android' ? 36 : 52,
     marginLeft: 10,
   },
   headerImage: {
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+
 function MainTabs() {
   return (
     <Tab.Navigator
@@ -80,7 +81,7 @@ function MainTabs() {
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
-          height: 70,
+          height: 110,
           paddingTop: 10,
         },
         tabBarButton: (props) => (
@@ -104,6 +105,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Carga" component={Carga} />
         <Stack.Screen name="Main" component={MainTabs} />
+        <Stack.Screen name="DetallesPez" component={DetallesPez} />
       </Stack.Navigator>
     </NavigationContainer>
   );
