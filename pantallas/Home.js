@@ -17,7 +17,7 @@ export default function Home() {
   const [pecesDestacados, setPecesDestacados] = useState([]);
   const [zonaDestacada, setZonaDestacada] = useState([]);
   const [error, setError] = useState(null);
-
+  const [rios,setRios]= useState([])
   const hayScroll = () => {
     if (scroll) setScroll(false);
   };
@@ -25,13 +25,40 @@ export default function Home() {
   const { width } = Dimensions.get('window');
   const carouselWidth = width - 20;
 
-  const dataCarrusel = [
-    { id: '1', title: 'Río Tormes', image: require('../img/Tormes.jpg') },
-    { id: '2', title: 'Río Tajo', image: require('../img/Tajo.jpg') },
-    { id: '3', title: 'Río Guadalquivir', image: require('../img/Guadalquivir.jpg') },
-  ];
+  const dataCarrusel=rios.map(rio => ({
+    id: rio.id.toString(),
+    title: rio.nombre,
+    image: { uri: rio.imagen },
+  }));
+  
+  const fetchRios = async () => {
+    const apiUrl = Constants.expoConfig.extra.apiUrl;
+
+    if (!apiUrl) {
+      setError('La variable de entorno API_URL no está definida.');
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${apiUrl}/rios`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = response.data;
+      setRios(data);
+
+      /* const idsDestacados = [1, 9, 21];
+      const pecesFiltrados = data.filter(patata => idsDestacados.includes(patata.id));
+      setPecesDestacados(pecesFiltrados); */
+    } catch (error) {
+      console.error('Error fetching peces:', error.message);
+      setError(`Error fetching peces: ${error.message}`);
+    }
+  };
   const renderItemCarrusel = ({ item }) => (
-    <Pressable onPress={() => { }}
+    <Pressable
+     onPress={() => navigation.navigate('DetallesRio', { rio: rios.find(p => p.id === parseInt(item.id)) })}
       style={({ pressed }) => [
         styles.tarjetaCarrusel,
         { transform: [{ scale: pressed ? 0.96 : 1 }] },
@@ -132,6 +159,7 @@ export default function Home() {
   useEffect(() => {
     fetchPeces();
     fetchZona();
+    fetchRios();
   }, []);
 
 

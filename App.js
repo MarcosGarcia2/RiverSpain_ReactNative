@@ -11,6 +11,7 @@ import PantallaPerfil from './pantallas/Perfil.js';
 import PantallaCustodiar from './pantallas/Custodiar.js';
 import PantallaExplorar from './pantallas/Explorar.js';
 import DetallesPez from './pantallas/DetallesPez.js';
+import DetallesRio from './pantallas/DetallesRio.js';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -106,6 +107,7 @@ export default function App() {
         <Stack.Screen name="Carga" component={Carga} />
         <Stack.Screen name="Main" component={MainTabs} />
         <Stack.Screen name="DetallesPez" component={DetallesPez} />
+       <Stack.Screen name="DetallesRio" component={DetallesRio} />
       </Stack.Navigator>
     </NavigationContainer>
   );

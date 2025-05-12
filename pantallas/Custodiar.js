@@ -149,7 +149,7 @@ export default function Zonas() {
             >
               <Image
                 source={require('../img/logo-azul-claro.png')}
-                style={{ width: 35, height: 35, backgroundColor: '#007AFF', borderRadius: 20 }}
+                style={{ width: 35, height: 35, backgroundColor: '#007AFF', borderRadius: 20, resizeMode: 'contain' }}
               />
             </Marker>
           );
