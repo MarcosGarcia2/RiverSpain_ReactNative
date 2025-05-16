@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, TextInput, Keyboard, TouchableWithoutFeedback, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, TextInput, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -120,21 +120,24 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     textAlign: 'left',
     marginBottom: 20,
-    marginTop: 50,
+    marginTop: Platform.OS === 'ios' ? 70 : 50,
   },
   card: {
     backgroundColor: '#111',
-    borderRadius: 12,
+    borderRadius: 15,
     marginBottom: 15,
     width: itemSize,
     elevation: 6,
-    overflow: 'hidden',
+    shadowColor: '#000', // iOS
+    shadowOffset: { width: 0, height: 3 }, // iOS
+    shadowOpacity: 0.3, // iOS
+    shadowRadius: 4.65,
   },
   imagenContainer: {
     width: '100%',
     height: dynamicHeight,
     overflow: 'hidden',
-    borderRadius: 10,
+    borderRadius: 15,
   },
   imagen: {
     width: '100%',
@@ -148,8 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     paddingVertical: 8,
     paddingHorizontal: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -169,9 +172,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 30,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: Platform.OS === 'ios' ? 15 : 5,
     marginBottom: 20,
     elevation: 2,
+    shadowColor: '#000', // iOS
+    shadowOffset: { width: 0, height: 3 }, // iOS
+    shadowOpacity: 0.1, // iOS
+    shadowRadius: 4.65,
     borderWidth: 2,
     borderColor: '#007AFF'
   },

@@ -282,7 +282,7 @@ export default function Home() {
 
         </View>
         <View>
-          <TouchableOpacity style={{ backgroundColor: '#007AFF', marginTop: 20, padding: 16, borderRadius: 50, elevation: 10, marginBottom: 50 }} onPress={explorarZona}>
+          <TouchableOpacity style={{ backgroundColor: '#007AFF', marginTop: 20, padding: 16, borderRadius: 50, elevation: 10, marginBottom: 50, shadowColor: '#000', shadowOffset: {width: 0, height: 6,}, shadowOpacity: 0.3, shadowRadius: 8.3 }} onPress={explorarZona}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>Explorar Zona</Text>
           </TouchableOpacity>
         </View>

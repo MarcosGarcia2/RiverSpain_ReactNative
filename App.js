@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 1000,
     elevation: 5,
+    shadowColor: '#000', // iOS
+    shadowOffset: { width: 0, height: 3 }, // iOS
+    shadowOpacity: 0.17, // iOS
+    shadowRadius: 4.65,
   },
   headerText: {
     color: '#000',

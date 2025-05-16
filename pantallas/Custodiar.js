@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import Constants from 'expo-constants';
@@ -146,11 +146,25 @@ export default function Zonas() {
                 longitude: parseFloat(zona.longitud),
               }}
               onPress={() => markerPulsado(zona)}
+
+              {...(Platform.OS === 'ios'
+                ? {
+                  image: require('../img/logo-azul-claro.png'),
+                }
+                : {})}
             >
-              <Image
-                source={require('../img/logo-azul-claro.png')}
-                style={{ width: 35, height: 35, backgroundColor: '#007AFF', borderRadius: 20, resizeMode: 'contain' }}
-              />
+              {Platform.OS === 'android' && (
+                <Image
+                  source={require('../img/logo-azul-claro.png')}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 20,
+                    resizeMode: 'contain',
+                    backgroundColor: '#007AFF'
+                  }}
+                />
+              )}
             </Marker>
           );
         })}
@@ -201,13 +215,13 @@ const styles = StyleSheet.create({
   buscadorContainer: {
     backgroundColor: 'transparent',
     zIndex: 1,
-    top: 80,
+    top: Platform.OS === 'ios' ? 100 : 80,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 30,
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingVertical: Platform.OS === 'ios' ? 10 : 3,
     elevation: 2,
     borderWidth: 2,
     borderColor: '#007AFF',
@@ -232,7 +246,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
     flexDirection: 'row',
-    top: 150,
+    top: Platform.OS === 'ios' ? 165 : 150,
     left: 20,
     backgroundColor: '#ffffff',
     borderRadius: 10,
