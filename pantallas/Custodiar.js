@@ -12,7 +12,7 @@ export default function Zonas() {
   const [ciudadBuscada, setCiudadBuscada] = useState('');
   const [zonasFiltradas, setZonasFiltradas] = useState([]);
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
-
+const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forzar refresco
   const mapRef = useRef(null);
 
   const route = useRoute();
@@ -20,11 +20,26 @@ export default function Zonas() {
 
   const ciudades = {
     1: 'Madrid',
-    2: 'Sevilla',
-    3: 'Barcelona',
+    2: 'Barcelona',
+    3: 'Sevilla',
     4: 'Valencia',
     5: 'Salamanca',
   };
+// Cargar zonas al montar y en cada refreshTrigger
+    useEffect(() => {
+      fetchZonas();
+    }, [refreshTrigger]);
+
+  // Forzar refresco en iOS después de montar
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      const timer = setTimeout(() => {
+        setRefreshTrigger(prev => !prev); // Cambiar el estado para disparar fetchZonas
+      }, 200); // Retraso de 1 segundo para simular refresco
+      return () => clearTimeout(timer); // Limpiar el temporizador al desmontar
+    }
+  }, []);
+
 
   useFocusEffect(
     useCallback(() => {
@@ -64,19 +79,19 @@ export default function Zonas() {
       }
     }
   }, [ciudadBuscada, zonas]);
-
+  const fetchZonas = async () => {
+        const apiUrl = Constants.expoConfig.extra.apiUrl;
+        try {
+          const response = await axios.get(`${apiUrl}/zonas`);
+          setZonas(response.data);
+        } catch (err) {
+          console.error('Error al obtener zonas:', err.message);
+          setError('No se pudieron cargar las zonas');
+        }
+      };
 
   useEffect(() => {
-    const fetchZonas = async () => {
-      const apiUrl = Constants.expoConfig.extra.apiUrl;
-      try {
-        const response = await axios.get(`${apiUrl}/zonas`);
-        setZonas(response.data);
-      } catch (err) {
-        console.error('Error al obtener zonas:', err.message);
-        setError('No se pudieron cargar las zonas');
-      }
-    };
+    
 
     fetchZonas();
   }, []);
@@ -147,13 +162,8 @@ export default function Zonas() {
               }}
               onPress={() => markerPulsado(zona)}
 
-              {...(Platform.OS === 'ios'
-                ? {
-                  image: require('../img/logo-azul-claro.png'),
-                }
-                : {})}
+          
             >
-              {Platform.OS === 'android' && (
                 <Image
                   source={require('../img/logo-azul-claro.png')}
                   style={{
@@ -164,7 +174,6 @@ export default function Zonas() {
                     backgroundColor: '#007AFF'
                   }}
                 />
-              )}
             </Marker>
           );
         })}
