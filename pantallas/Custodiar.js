@@ -12,7 +12,7 @@ export default function Zonas() {
   const [ciudadBuscada, setCiudadBuscada] = useState('');
   const [zonasFiltradas, setZonasFiltradas] = useState([]);
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
-const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forzar refresco
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const mapRef = useRef(null);
 
   const route = useRoute();
@@ -25,20 +25,32 @@ const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forz
     4: 'Valencia',
     5: 'Salamanca',
   };
-// Cargar zonas al montar y en cada refreshTrigger
-    useEffect(() => {
-      fetchZonas();
-    }, [refreshTrigger]);
+  useEffect(() => {
+    fetchZonas();
+  }, [refreshTrigger]);
 
-  // Forzar refresco en iOS después de montar
+  // Forzar refresco en iOS
   useEffect(() => {
     if (Platform.OS === 'ios') {
       const timer = setTimeout(() => {
-        setRefreshTrigger(prev => !prev); // Cambiar el estado para disparar fetchZonas
-      }, 200); // Retraso de 1 segundo para simular refresco
-      return () => clearTimeout(timer); // Limpiar el temporizador al desmontar
+        setRefreshTrigger(prev => !prev);
+      }, 200);
+      return () => clearTimeout(timer);
     }
   }, []);
+
+  useEffect(() => {
+    if (ciudadBuscada === '') {
+      setZonasFiltradas(zonas);
+
+      if (Platform.OS === 'ios') {
+        setTimeout(() => {
+          setZonasFiltradas([...zonas]);
+        }, 100);
+      }
+    }
+  }, [ciudadBuscada]);
+
 
 
   useFocusEffect(
@@ -66,7 +78,7 @@ const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forz
       const resultado = zonas.filter(z =>
         ciudades[z.ciudadid]?.toLowerCase().includes(ciudadBuscada.toLowerCase())
       );
-      setZonasFiltradas(resultado);
+      setZonasFiltradas(resultado.length > 0 ? resultado : zonas);
 
       if (resultado.length > 0 && mapRef.current) {
         const zona = resultado[0];
@@ -80,19 +92,17 @@ const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forz
     }
   }, [ciudadBuscada, zonas]);
   const fetchZonas = async () => {
-        const apiUrl = Constants.expoConfig.extra.apiUrl;
-        try {
-          const response = await axios.get(`${apiUrl}/zonas`);
-          setZonas(response.data);
-        } catch (err) {
-          console.error('Error al obtener zonas:', err.message);
-          setError('No se pudieron cargar las zonas');
-        }
-      };
+    const apiUrl = Constants.expoConfig.extra.apiUrl;
+    try {
+      const response = await axios.get(`${apiUrl}/zonas`);
+      setZonas(response.data);
+    } catch (err) {
+      console.error('Error al obtener zonas:', err.message);
+      setError('No se pudieron cargar las zonas');
+    }
+  };
 
   useEffect(() => {
-    
-
     fetchZonas();
   }, []);
 
@@ -162,18 +172,18 @@ const [refreshTrigger, setRefreshTrigger] = useState(false); // Estado para forz
               }}
               onPress={() => markerPulsado(zona)}
 
-          
+
             >
-                <Image
-                  source={require('../img/logo-azul-claro.png')}
-                  style={{
-                    width: 35,
-                    height: 35,
-                    borderRadius: 20,
-                    resizeMode: 'contain',
-                    backgroundColor: '#007AFF'
-                  }}
-                />
+              <Image
+                source={require('../img/logo-azul-claro.png')}
+                style={{
+                  width: 35,
+                  height: 35,
+                  borderRadius: 20,
+                  resizeMode: 'contain',
+                  backgroundColor: '#007AFF'
+                }}
+              />
             </Marker>
           );
         })}
@@ -244,6 +254,7 @@ const styles = StyleSheet.create({
   buscador: {
     flex: 1,
     fontSize: 16,
+    padding: 5
   },
   iconoX: {
     marginLeft: 6,

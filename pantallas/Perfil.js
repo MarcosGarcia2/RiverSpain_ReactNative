@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -107,7 +107,7 @@ export default function Perfil() {
             <Text style={styles.texto1b}>Regístrate en nuestra página web accediendo desde aquí</Text>
             <Icon name="arrow-down" size={22} />
 
-            <TouchableOpacity style={styles.boton} onPress={() => Linking.openURL('')}>
+            <TouchableOpacity style={styles.boton} onPress={() => Linking.openURL('https://riverspain-proyecto.web.app/#formulario-voluntarios')}>
               <Text style={styles.botonTexto}>
                 Ir a la web
               </Text>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 15,
-    marginTop: 90,
+    marginTop: Platform.OS === 'ios' ? 110 : 90,
   },
   tituloPantalla: {
     fontSize: 22,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: '#fff',
-    padding: 3,
+    padding: Platform.OS === 'ios' ? 10 : 3,
     marginBottom: 10,
     borderRadius: 30,
     borderColor: '#007AFF',
@@ -161,10 +161,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
+    padding: 5,
   },
   boton: {
     backgroundColor: '#007AFF',
-    padding: 12,
+    padding: Platform.OS === 'ios' ? 15 : 12,
     borderRadius: 25,
     alignItems: 'center',
     marginTop: 10,

@@ -4,7 +4,7 @@ export default {
     slug: 'riverspain',
     version: '1.0.0',
     extra: {
-      apiUrl: 'https://kurt-geek-investigations-economies.trycloudflare.com/riverspain', // Fallback por si no se carga .env
+      apiUrl: 'https://institutions-carriers-interpreted-explains.trycloudflare.com/riverspain', // Fallback por si no se carga .env
     },
   },
 };
